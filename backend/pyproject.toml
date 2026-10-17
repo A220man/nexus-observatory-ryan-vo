@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=69.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nexus-observatory-ryan-vo"
+version = "1.0.0"
+description = "Cloud-disk sharing URL parser, classifier, and catalog."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+authors = [{ name = "Ryan Vo", email = "ryandtvo@gmail.com" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/A220man/nexus-observatory-ryan-vo"
+
+[tool.setuptools]
+packages = ["app", "app.api", "app.core", "app.models", "app.services"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".."]
+asyncio_mode = "auto"

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "current_feature": "skeleton",
+  "features": [
+    {
+      "id": "skeleton",
+      "title": "FastAPI/React runnable skeleton with end-to-end link-parsing workflow",
+      "status": "done",
+      "acceptance": [
+        "Backend imports and starts; health endpoint returns 200.",
+        "Provider URL parser extracts provider, resource id, password, and direct-link strategy for 8 cloud-disk providers from a sharing URL.",
+        "API endpoint accepts a sharing URL, returns parsed result, persisted to SQLite, returned by list endpoint.",
+        "Frontend dashboard submits a link, submits to API, and renders parsed results with loading/error/empty states.",
+        "Backend pytest suite (>=12 tests) and frontend vitest suite (>=3 tests) pass.",
+        "preflight.py reports no missing required files, source bytes within 50k-150k, no TODO/FIXME/NotImplementedError, no token-shaped literals."
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "ml-classifier",
+      "title": "Hand-written TF-IDF + logistic-regression URL classifier with labeled dataset and evaluation",
+      "status": "future",
+      "acceptance": [
+        "A from-scratch character n-gram TF-IDF vectorizer and logistic regression classifier run offline with no external ML dependency.",
+        "A labeled dataset of example share URLs for 8 providers is shipped.",
+        "An evaluation endpoint reports accuracy/precision/recall against the dataset; deterministic results.",
+        "API exposes classifier predictions with confidence alongside rule-based parsing."
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "catalog",
+      "title": "Catalog workflow: search, filter, detail view, and JSON/CSV export of parsed links",
+      "status": "future",
+      "acceptance": [
+        "List endpoint supports pagination and provider/status filtering.",
+        "Frontend shows a filterable, searchable, paginated table with pagination controls.",
+        "Detail view shows full parsed record; export downloads JSON and CSV."
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "oidc-auth",
+      "title": "OIDC authorization-code login via Keycloak with state+nonce+PKCE, role-based authorization, and audit logs",
+      "status": "future",
+      "acceptance": [
+        "Backend-managed sessions with HttpOnly SameSite cookies and CSRF protection on writes.",
+        "viewer/operator/admin roles enforced on all data endpoints.",
+        "Unauthenticated requests rejected; role denial tested.",
+        "Local-only demo mode binding 127.0.0.1 that refuses to start in production."
+      ],
+      "implementation": [],
+      "tests": []
+    },
+    {
+      "id": "llm-adapters",
+      "title": "Opt-in LLM advisory explanations across OpenAI-compatible, Anthropic, and Gemini adapters",
+      "status": "future",
+      "acceptance": [
+        "LLM_API_KEY is the only credential; provider/model/base_url configurable.",
+        "Explanations labeled advisory, grounded in stored records, never fabricated.",
+        "Clear provider errors on misconfiguration; bounded timeouts; redacted errors."
+      ],
+      "implementation": [],
+      "tests": []
+    }
+  ]
+}
