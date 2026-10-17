@@ -1,0 +1,43 @@
+{
+  "name": "nexus-observatory-ryan-vo",
+  "account": "ryan",
+  "author": "Ryan Vo",
+  "email": "ryandtvo@gmail.com",
+  "github_owner": "A220man",
+  "phase": "new",
+  "version": "1.0.0",
+  "description": "Cloud-disk sharing URL parser, classifier, and catalog. Pure-Python TF-IDF + logistic regression ML engine for 8 providers.",
+  "tech": {
+    "backend": {
+      "runtime": "Python 3.12",
+      "framework": "FastAPI",
+      "database": "SQLite (async SQLAlchemy + aiosqlite)",
+      "ml_engine": "From-scratch TF-IDF + logistic regression (no numpy/sklearn)"
+    },
+    "frontend": {
+      "runtime": "React 18 + TypeScript",
+      "build": "Vite",
+      "test": "Vitest + Testing Library"
+    }
+  },
+  "endpoints": {
+    "health": "GET /health",
+    "parse": "POST /api/v1/links",
+    "list": "GET /api/v1/links",
+    "detail": "GET /api/v1/links/{id}",
+    "export": "GET /api/v1/links/export",
+    "statuses": "GET /api/v1/statuses",
+    "classify": "POST /api/v1/classify",
+    "providers": "GET /api/v1/providers",
+    "evaluate": "POST /api/v1/evaluate"
+  },
+  "features": {
+    "skeleton": {
+      "status": "done",
+      "description": "End-to-end link-parsing workflow: submit URL \u2192 parse \u2192 persist \u2192 list \u2192 detail \u2192 export. ML classification + evaluation. Frontend dashboard. Dockerized. CI pipeline."
+    }
+  },
+  "owner": "A220man",
+  "summary": "Work in progress: nexus-observatory-ryan-vo",
+  "status": "work-in-progress"
+}
