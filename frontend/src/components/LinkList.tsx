@@ -12,6 +12,7 @@ export default function LinkList({ refreshTrigger = 0 }: LinkListProps) {
   const [page, setPage] = useState(1);
   const [providerFilter, setProviderFilter] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<ParseStatus | string>("");
+  const [isExporting, setIsExporting] = useState(false);
 
   const load = async () => {
     setIsLoading(true);
@@ -41,6 +42,25 @@ export default function LinkList({ refreshTrigger = 0 }: LinkListProps) {
     setPage(1);
   };
 
+  const handleExport = async (format: "json" | "csv") => {
+    setIsExporting(true);
+    try {
+      const blob = await api.exportLinks(format);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `nexus-observatory-export.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : `Failed to export ${format.toUpperCase()}`);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   if (error) {
     return <p className="link-list link-list--error" role="alert">Error: {error}</p>;
   }
@@ -48,77 +68,115 @@ export default function LinkList({ refreshTrigger = 0 }: LinkListProps) {
   const items: LinkRecord[] = data?.items ?? [];
   const total = data?.total ?? 0;
   const limit = data?.limit ?? 20;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
 
   return (
     <div className="link-list">
+      <header className="link-list__header">
+        <h2>Catalog</h2>
+        <div className="link-list__actions">
+          <button
+            className="btn btn--secondary"
+            onClick={() => handleExport("json")}
+            disabled={isExporting || total === 0}
+            aria-busy={isExporting}
+          >
+            {isExporting ? "Exporting…" : "Export JSON"}
+          </button>
+          <button
+            className="btn btn--secondary"
+            onClick={() => handleExport("csv")}
+            disabled={isExporting || total === 0}
+            aria-busy={isExporting}
+          >
+            {isExporting ? "Exporting…" : "Export CSV"}
+          </button>
+        </div>
+      </header>
+
       <div className="link-list__filters">
-        <input
-          type="text"
-          placeholder="Filter by provider…"
-          value={providerFilter}
-          onChange={handleProviderChange}
-          className="filter-input"
-          aria-label="Filter by provider"
-        />
-        <select
-          value={statusFilter}
-          onChange={handleStatusChange}
-          className="filter-select"
-          aria-label="Filter by status"
-        >
-          <option value="">All statuses</option>
-          <option value="parsed">parsed</option>
-          <option value="needs_password">needs_password</option>
-          <option value="unsupported">unsupported</option>
-          <option value="error">error</option>
-        </select>
+        <label className="link-list__filter">
+          <span>Provider</span>
+          <input
+            type="text"
+            placeholder="Filter by provider key…"
+            value={providerFilter}
+            onChange={handleProviderChange}
+            className="link-list__input"
+          />
+        </label>
+        <label className="link-list__filter">
+          <span>Status</span>
+          <select
+            value={statusFilter}
+            onChange={handleStatusChange}
+            className="link-list__input"
+          >
+            <option value="">All</option>
+            <option value="parsed">parsed</option>
+            <option value="needs_password">needs_password</option>
+            <option value="unsupported">unsupported</option>
+            <option value="error">error</option>
+          </select>
+        </label>
       </div>
 
       {isLoading ? (
         <p className="link-list__loading">Loading…</p>
       ) : items.length === 0 ? (
-        <p className="link-list__empty">No links found.</p>
+        <p className="link-list__empty">No records yet. Parse a share URL to get started.</p>
       ) : (
         <>
-          <table className="link-table">
+          <table className="link-list__table" role="grid">
             <thead>
               <tr>
-                <th>#ID</th>
-                <th>Provider</th>
-                <th>Resource ID</th>
-                <th>Status</th>
-                <th>Confidence</th>
+                <th scope="col">Provider</th>
+                <th scope="col">Resource ID</th>
+                <th scope="col">Status</th>
+                <th scope="col">Confidence</th>
+                <th scope="col">Created (UTC)</th>
               </tr>
             </thead>
             <tbody>
               {items.map((item) => (
                 <tr key={item.id}>
-                  <td className="font-mono">{item.id}</td>
-                  <td>{item.provider || "unknown"}</td>
-                  <td className="font-mono">{item.resource_id.slice(0, 20)}{item.resource_id.length > 20 && "…"}</td>
-                  <td>{item.status}</td>
-                  <td>{(item.confidence * 100).toFixed(1)}%</td>
+                  <td>{item.provider}</td>
+                  <td>
+                    <code className="link-list__code">{item.resource_id}</code>
+                  </td>
+                  <td>
+                    <span className={`badge badge--${item.status}`}>{item.status}</span>
+                  </td>
+                  <td>{item.confidence.toFixed(2)}</td>
+                  <td>{item.created_at}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <div className="link-list__pagination">
-            <button
-              className="btn btn--outline"
-              onClick={() => setPage(Math.max(1, page - 1))}
-              disabled={page === 1}
-            >
-              ← Prev
-            </button>
-            <span>Page {page} of {Math.max(1, Math.ceil(total / limit))}</span>
-            <button
-              className="btn btn--outline"
-              onClick={() => setPage(page + 1)}
-              disabled={page * limit >= total}
-            >
-              Next →
-            </button>
-          </div>
+
+          {totalPages > 1 && (
+            <nav className="link-list__pagination" aria-label="Pagination">
+              <button
+                className="btn btn--ghost"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                aria-label="Previous page"
+              >
+                Previous
+              </button>
+              <span className="link-list__page-info">
+                Page {page} of {totalPages} ({total} total)
+              </span>
+              <button
+                className="btn btn--ghost"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                aria-label="Next page"
+              >
+                Next
+              </button>
+            </nav>
+          )}
         </>
       )}
     </div>
