@@ -147,7 +147,16 @@ export function createClient(opts: ClientOptions = {}) {
     getLink: (id: number) => request<LinkRecord>(`/api/v1/links/${id}`),
 
     exportLinks: (format: "json" | "csv" = "json") =>
-      request<LinkRecord[]>(`/api/v1/links/export?format=${format}`),
+      fetchImpl(`${baseUrl}/api/v1/links/export?format=${format}`).then((resp) => {
+        if (!resp.ok) {
+          throw new ApiError(
+            `API ${resp.status}: ${resp.statusText || "error"}`,
+            resp.status,
+            undefined,
+          );
+        }
+        return resp.blob();
+      }),
 
     // ── statuses ──
     getStatuses: () => request<ParseStatus[]>("/api/v1/statuses"),

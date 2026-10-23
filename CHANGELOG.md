@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.0.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -75,3 +79,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
   but unused.
 - Direct-link verification: out of scope (see PLAN.md). The engine extracts
   identifiers and passwords but does not reverse-engineer working download URLs.
+
+## [1.0.1] — 2026-10-23
+
+### Added — Frontend export workflow
+
+- Export JSON and Export CSV buttons in the Catalog tab.
+- API client `exportLinks(format)` method returning Blob for browser download.
+- Export honors current filter/pagination state via backend query parameters.
+- Frontend build and all tests pass.
