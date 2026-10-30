@@ -1,11 +1,27 @@
 {
   "schema_version": 1,
-  "current_feature": "continue-implementation",
+  "current_feature": "lifespan-migration",
   "features": [
+    {
+      "id": "lifespan-migration",
+      "title": "Modernize FastAPI lifespan handlers",
+      "status": "done",
+      "acceptance": [
+        "Replace deprecated @app.on_event with @asynccontextmanager lifespan",
+        "Eliminate deprecation warnings in test output",
+        "All backend tests pass"
+      ],
+      "implementation": [
+        "backend/app/main.py"
+      ],
+      "tests": [
+        "backend/tests/test_api.py"
+      ]
+    },
     {
       "id": "continue-implementation",
       "title": "Continue implementation and resolve known failures",
-      "status": "in_progress",
+      "status": "planned",
       "acceptance": [
         "Run checks, fix failures, and implement the next planned feature"
       ],

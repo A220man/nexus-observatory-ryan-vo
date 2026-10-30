@@ -4,13 +4,26 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-continue-implementation
+lifespan-migration
 
 ## Roadmap
 
+### lifespan-migration — Modernize FastAPI lifespan handlers
+
+Status: done
+
+Acceptance:
+- Replace deprecated @app.on_event with @asynccontextmanager lifespan
+- Eliminate deprecation warnings in test output
+- All backend tests pass
+
+Implementation: `backend/app/main.py`
+
+Tests: `backend/tests/test_api.py`
+
 ### continue-implementation — Continue implementation and resolve known failures
 
-Status: in_progress
+Status: planned
 
 Acceptance:
 - Run checks, fix failures, and implement the next planned feature
