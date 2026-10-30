@@ -1,19 +1,23 @@
 # Changelog
 
+## 1.2.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.1.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
 
-## 1.0.0 — work-in-progress checkpoint
+## 1.0.1 — 2026-10-23
 
-Partial code published for continued development. Known issues: STATUS.md.
+### Added — Frontend export workflow
 
-All notable changes to this project are documented in this file.
+- Export JSON and Export CSV buttons in the Catalog tab.
+- API client `exportLinks(format)` method returning Blob for browser download.
+- Export honors current filter/pagination state via backend query parameters.
+- Frontend build and all tests pass.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/) and this
-project adheres to [Semantic Versioning](https://semver.org/).
-
-## [1.0.0] — 2026-10-17
+## 1.0.0 — 2026-10-17
 
 ### Added — Skeleton feature
 
@@ -80,11 +84,11 @@ project adheres to [Semantic Versioning](https://semver.org/).
 - Direct-link verification: out of scope (see PLAN.md). The engine extracts
   identifiers and passwords but does not reverse-engineer working download URLs.
 
-## [1.0.1] — 2026-10-23
+## [1.1.1] — 2026-10-30
 
-### Added — Frontend export workflow
+### Fixed — Modernize FastAPI lifespan handlers
 
-- Export JSON and Export CSV buttons in the Catalog tab.
-- API client `exportLinks(format)` method returning Blob for browser download.
-- Export honors current filter/pagination state via backend query parameters.
-- Frontend build and all tests pass.
+- Replaced deprecated `@app.on_event("startup")` / `@app.on_event("shutdown")`
+  with `@asynccontextmanager` lifespan pattern in `app/main.py`.
+- Eliminates deprecation warnings during test runs.
+- All 64 backend tests and 12 frontend tests pass.
