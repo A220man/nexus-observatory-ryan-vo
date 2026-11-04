@@ -64,3 +64,13 @@ Thumbs.db
 
 # Build artifacts
 *.egg-info/
+.turbo/
+**/data/media/
+*.pyc
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
