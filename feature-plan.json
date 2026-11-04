@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "lifespan-migration",
+  "current_feature": "add-frontend-component-tests",
   "features": [
     {
       "id": "lifespan-migration",
@@ -16,6 +16,27 @@
       ],
       "tests": [
         "backend/tests/test_api.py"
+      ]
+    },
+    {
+      "id": "add-frontend-component-tests",
+      "title": "Add test coverage for untested frontend components",
+      "status": "done",
+      "acceptance": [
+        "Add tests for LinkResult component",
+        "Add tests for ProviderCard component",
+        "Add tests for LinkList component",
+        "All frontend tests pass"
+      ],
+      "implementation": [
+        "frontend/src/components/LinkResult.test.tsx",
+        "frontend/src/components/ProviderCard.test.tsx",
+        "frontend/src/components/LinkList.test.tsx"
+      ],
+      "tests": [
+        "frontend/src/components/LinkResult.test.tsx",
+        "frontend/src/components/ProviderCard.test.tsx",
+        "frontend/src/components/LinkList.test.tsx"
       ]
     },
     {
