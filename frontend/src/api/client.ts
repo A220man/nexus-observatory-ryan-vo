@@ -1,3 +1,4 @@
+
 /**
  * Typed API client for the Nexus Observatory backend.
  *
@@ -146,8 +147,11 @@ export function createClient(opts: ClientOptions = {}) {
 
     getLink: (id: number) => request<LinkRecord>(`/api/v1/links/${id}`),
 
-    exportLinks: (format: "json" | "csv" = "json") =>
-      fetchImpl(`${baseUrl}/api/v1/links/export?format=${format}`).then((resp) => {
+    exportLinks: (format: "json" | "csv" = "json", provider?: string, status?: string) => {
+      const params = new URLSearchParams({ format });
+      if (provider) params.append("provider", provider);
+      if (status) params.append("status", status);
+      return fetchImpl(`${baseUrl}/api/v1/links/export?${params.toString()}`).then((resp) => {
         if (!resp.ok) {
           throw new ApiError(
             `API ${resp.status}: ${resp.statusText || "error"}`,
@@ -156,7 +160,8 @@ export function createClient(opts: ClientOptions = {}) {
           );
         }
         return resp.blob();
-      }),
+      });
+    },
 
     // ── statuses ──
     getStatuses: () => request<ParseStatus[]>("/api/v1/statuses"),
@@ -176,3 +181,4 @@ export function createClient(opts: ClientOptions = {}) {
 
 /** Default client instance for use in the app. */
 export const api = createClient();
+

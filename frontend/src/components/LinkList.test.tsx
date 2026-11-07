@@ -1,3 +1,4 @@
+
 /**
  * Tests for the LinkList component.
  */
@@ -162,7 +163,7 @@ describe("<LinkList>", () => {
     });
     await userEvent.click(screen.getByRole("button", { name: "Export JSON" }));
     await waitFor(() => {
-      expect(exportLinksMock).toHaveBeenCalledWith("json");
+      expect(exportLinksMock).toHaveBeenCalledWith("json", undefined, undefined);
     });
   });
 
@@ -173,7 +174,7 @@ describe("<LinkList>", () => {
     });
     await userEvent.click(screen.getByRole("button", { name: "Export CSV" }));
     await waitFor(() => {
-      expect(exportLinksMock).toHaveBeenCalledWith("csv");
+      expect(exportLinksMock).toHaveBeenCalledWith("csv", undefined, undefined);
     });
   });
 
@@ -276,3 +277,4 @@ describe("<LinkList>", () => {
     });
   });
 });
+

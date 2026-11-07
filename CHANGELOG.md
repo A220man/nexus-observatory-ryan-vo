@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
+# Changelog
+
 ## 1.3.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -96,3 +102,15 @@ Partial code published for continued development. Known issues: STATUS.md.
   with `@asynccontextmanager` lifespan pattern in `app/main.py`.
 - Eliminates deprecation warnings during test runs.
 - All 64 backend tests and 12 frontend tests pass.
+
+## [1.3.1] — 2026-11-07
+
+### Fixed — Export honors filter state
+
+- Updated `GET /api/v1/links/export` to accept optional `provider` and `status`
+  query parameters matching the list endpoint.
+- Frontend `api.exportLinks(format, provider?, status?)` now passes the current
+  Catalog tab filters so exports reflect the visible records.
+- LinkList component passes `providerFilter` and `statusFilter` when exporting.
+- All 64 backend tests and 45 frontend tests pass.
+

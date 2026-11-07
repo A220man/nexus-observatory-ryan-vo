@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-add-frontend-component-tests
+continue-implementation
 
 ## Roadmap
 
@@ -37,8 +37,13 @@ Tests: `frontend/src/components/LinkResult.test.tsx`, `frontend/src/components/P
 
 ### continue-implementation — Continue implementation and resolve known failures
 
-Status: planned
+Status: done
 
 Acceptance:
 - Run checks, fix failures, and implement the next planned feature
+- Fix export functionality to honor current filter/pagination state
+
+Implementation: `backend/app/api/routes_links.py`, `frontend/src/api/client.ts`, `frontend/src/components/LinkList.tsx`
+
+Tests: `backend/tests/test_api.py`, `frontend/src/components/LinkList.test.tsx`
 

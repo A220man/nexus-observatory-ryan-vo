@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { LinkRecord, LinkListResponse, ParseStatus, api } from "../api/client";
 
@@ -45,7 +46,11 @@ export default function LinkList({ refreshTrigger = 0 }: LinkListProps) {
   const handleExport = async (format: "json" | "csv") => {
     setIsExporting(true);
     try {
-      const blob = await api.exportLinks(format);
+      const blob = await api.exportLinks(
+        format,
+        providerFilter || undefined,
+        statusFilter || undefined,
+      );
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -182,3 +187,4 @@ export default function LinkList({ refreshTrigger = 0 }: LinkListProps) {
     </div>
   );
 }
+
