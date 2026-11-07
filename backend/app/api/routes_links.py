@@ -1,3 +1,4 @@
+
 """API routes for the link-parsing workflow.
 
 Covers submit (parse) → persist → list → detail → export.
@@ -154,13 +155,21 @@ async def list_links(
         limit=limit,
     )
 
+
 @router.get("/links/export")
 async def export_links(
     session: AsyncSession = Depends(get_session),
     fmt: Annotated[str, Query(pattern="^(json|csv)$", alias="format")] = "json",
+    provider: Annotated[str | None, Query()] = None,
+    status: Annotated[str | None, Query()] = None,
 ):
-    """Export all link records as JSON or CSV."""
-    result = await session.execute(select(LinkRecord).order_by(LinkRecord.id))
+    """Export all link records as JSON or CSV, honoring optional filters."""
+    query = select(LinkRecord).order_by(LinkRecord.id)
+    if provider:
+        query = query.where(LinkRecord.provider == provider)
+    if status:
+        query = query.where(LinkRecord.status == status)
+    result = await session.execute(query)
     records = result.scalars().all()
 
     if fmt == "json":
@@ -188,6 +197,7 @@ async def export_links(
         headers={"Content-Disposition": "attachment; filename=links.csv"},
     )
 
+
 @router.get("/links/{link_id}", response_model=LinkResponse)
 async def get_link(
     link_id: int,
@@ -209,3 +219,4 @@ async def get_link(
 async def list_statuses() -> list[str]:
     """List the possible parse statuses."""
     return [e.value for e in ParseStatus]
+

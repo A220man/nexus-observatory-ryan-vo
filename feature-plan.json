@@ -1,6 +1,7 @@
+
 {
   "schema_version": 1,
-  "current_feature": "add-frontend-component-tests",
+  "current_feature": "continue-implementation",
   "features": [
     {
       "id": "lifespan-migration",
@@ -42,12 +43,21 @@
     {
       "id": "continue-implementation",
       "title": "Continue implementation and resolve known failures",
-      "status": "planned",
+      "status": "done",
       "acceptance": [
-        "Run checks, fix failures, and implement the next planned feature"
+        "Run checks, fix failures, and implement the next planned feature",
+        "Fix export functionality to honor current filter/pagination state"
       ],
-      "implementation": [],
-      "tests": []
+      "implementation": [
+        "backend/app/api/routes_links.py",
+        "frontend/src/api/client.ts",
+        "frontend/src/components/LinkList.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_api.py",
+        "frontend/src/components/LinkList.test.tsx"
+      ]
     }
   ]
 }
+
