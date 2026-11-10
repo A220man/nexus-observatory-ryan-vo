@@ -178,6 +178,40 @@ describe("<LinkList>", () => {
     });
   });
 
+  it("calls exportLinks with current provider filter", async () => {
+    render(<LinkList />);
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Export JSON" })).toBeInTheDocument();
+    });
+    const user = userEvent.setup();
+    const input = screen.getByPlaceholderText("Filter by provider key…");
+    await user.type(input, "baidu");
+    await waitFor(() => {
+      expect(listLinksMock).toHaveBeenCalledWith(1, 20, "baidu", undefined);
+    });
+    await userEvent.click(screen.getByRole("button", { name: "Export JSON" }));
+    await waitFor(() => {
+      expect(exportLinksMock).toHaveBeenCalledWith("json", "baidu", undefined);
+    });
+  });
+
+  it("calls exportLinks with current status filter", async () => {
+    render(<LinkList />);
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Export JSON" })).toBeInTheDocument();
+    });
+    const user = userEvent.setup();
+    const select = screen.getByRole("combobox");
+    await user.selectOptions(select, "needs_password");
+    await waitFor(() => {
+      expect(listLinksMock).toHaveBeenCalledWith(1, 20, undefined, "needs_password");
+    });
+    await userEvent.click(screen.getByRole("button", { name: "Export JSON" }));
+    await waitFor(() => {
+      expect(exportLinksMock).toHaveBeenCalledWith("json", undefined, "needs_password");
+    });
+  });
+
   it("disables export buttons when total is 0", async () => {
     listLinksMock.mockResolvedValueOnce({ items: [], total: 0, page: 1, limit: 20 });
     render(<LinkList />);
