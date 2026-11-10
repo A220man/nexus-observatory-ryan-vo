@@ -1,22 +1,41 @@
 # Changelog
 
+## 1.5.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.4.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
 
-# Changelog
+### Added — Test coverage for export filter functionality
 
-## 1.3.0 — work-in-progress checkpoint
+- Added backend tests for export with provider filter (JSON and CSV)
+- Added backend tests for export with status filter (JSON and CSV)
+- Added frontend tests for export honoring current provider filter
+- Added frontend tests for export honoring current status filter
+- All 68 backend tests pass (4 new export filter tests)
+- All 47 frontend tests pass (2 new export filter tests)
 
-Partial code published for continued development. Known issues: STATUS.md.
+## 1.3.1 — 2026-11-07
 
-## 1.2.0 — work-in-progress checkpoint
+### Fixed — Export honors filter state
 
-Partial code published for continued development. Known issues: STATUS.md.
+- Updated `GET /api/v1/links/export` to accept optional `provider` and `status`
+  query parameters matching the list endpoint.
+- Frontend `api.exportLinks(format, provider?, status?)` now passes the current
+  Catalog tab filters so exports reflect the visible records.
+- LinkList component passes `providerFilter` and `statusFilter` when exporting.
+- All 64 backend tests and 45 frontend tests pass.
 
-## 1.1.0 — work-in-progress checkpoint
+## 1.1.1 — 2026-10-30
 
-Partial code published for continued development. Known issues: STATUS.md.
+### Fixed — Modernize FastAPI lifespan handlers
+
+- Replaced deprecated `@app.on_event("startup")` / `@app.on_event("shutdown")`
+  with `@asynccontextmanager` lifespan pattern in `app/main.py`.
+- Eliminates deprecation warnings during test runs.
+- All 64 backend tests and 12 frontend tests pass.
 
 ## 1.0.1 — 2026-10-23
 
@@ -93,24 +112,3 @@ Partial code published for continued development. Known issues: STATUS.md.
   but unused.
 - Direct-link verification: out of scope (see PLAN.md). The engine extracts
   identifiers and passwords but does not reverse-engineer working download URLs.
-
-## [1.1.1] — 2026-10-30
-
-### Fixed — Modernize FastAPI lifespan handlers
-
-- Replaced deprecated `@app.on_event("startup")` / `@app.on_event("shutdown")`
-  with `@asynccontextmanager` lifespan pattern in `app/main.py`.
-- Eliminates deprecation warnings during test runs.
-- All 64 backend tests and 12 frontend tests pass.
-
-## [1.3.1] — 2026-11-07
-
-### Fixed — Export honors filter state
-
-- Updated `GET /api/v1/links/export` to accept optional `provider` and `status`
-  query parameters matching the list endpoint.
-- Frontend `api.exportLinks(format, provider?, status?)` now passes the current
-  Catalog tab filters so exports reflect the visible records.
-- LinkList component passes `providerFilter` and `statusFilter` when exporting.
-- All 64 backend tests and 45 frontend tests pass.
-

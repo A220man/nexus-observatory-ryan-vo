@@ -162,7 +162,77 @@ def test_export_csv(client):
     assert resp.status_code == 200
     content = resp.text
     assert "provider" in content
+
+def test_export_json_with_provider_filter(client):
+    # Create a baidu link
+    client.post(
+        "/api/v1/links",
+        json={"url": "https://pan.baidu.com/s/1aBc"},
+    )
+    # Create an aliyun link
+    client.post(
+        "/api/v1/links",
+        json={"url": "https://aliyuncloud.com/s/AbCdEfGh?pwd=abcd"},
+    )
+    # Export with baidu provider filter
+    resp = client.get("/api/v1/links/export?format=json&provider=baidu")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert isinstance(data, list)
+    assert len(data) == 1
+    assert data[0]["provider"] == "baidu"
+
+
+def test_export_json_with_status_filter(client):
+    # Create a parsed link
+    client.post(
+        "/api/v1/links",
+        json={"url": "https://pan.baidu.com/s/1aBc"},
+    )
+    # Create an unsupported link
+    client.post(
+        "/api/v1/links",
+        json={"url": "https://example.com/unsupported"},
+    )
+    # Export with parsed status filter
+    resp = client.get("/api/v1/links/export?format=json&status=parsed")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert isinstance(data, list)
+    assert len(data) == 1
+    assert data[0]["status"] == "parsed"
+
+
+def test_export_csv_with_provider_filter(client):
+    client.post(
+        "/api/v1/links",
+        json={"url": "https://pan.baidu.com/s/1aBc"},
+    )
+    client.post(
+        "/api/v1/links",
+        json={"url": "https://aliyuncloud.com/s/AbCdEfGh?pwd=abcd"},
+    )
+    resp = client.get("/api/v1/links/export?format=csv&provider=baidu")
+    assert resp.status_code == 200
+    content = resp.text
     assert "baidu" in content
+    assert "aliyun" not in content
+
+
+def test_export_csv_with_status_filter(client):
+    client.post(
+        "/api/v1/links",
+        json={"url": "https://pan.baidu.com/s/1aBc"},
+    )
+    client.post(
+        "/api/v1/links",
+        json={"url": "https://example.com/unsupported"},
+    )
+    resp = client.get("/api/v1/links/export?format=csv&status=parsed")
+    assert resp.status_code == 200
+    content = resp.text
+    assert "parsed" in content
+    assert "unsupported" not in content
 
 
 # ── classify ──────────────────────────────────────────────────────────
