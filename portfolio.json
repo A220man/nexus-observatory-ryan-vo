@@ -5,7 +5,7 @@
   "email": "ryandtvo@gmail.com",
   "github_owner": "A220man",
   "phase": "new",
-  "version": "1.0.0",
+  "version": "1.6.0",
   "description": "Cloud-disk sharing URL parser, classifier, and catalog. Pure-Python TF-IDF + logistic regression ML engine for 8 providers.",
   "tech": {
     "backend": {

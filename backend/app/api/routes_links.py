@@ -164,6 +164,8 @@ async def export_links(
     status: Annotated[str | None, Query()] = None,
 ):
     """Export all link records as JSON or CSV, honoring optional filters."""
+
+# Combined filter: both provider and status applied with AND
     query = select(LinkRecord).order_by(LinkRecord.id)
     if provider:
         query = query.where(LinkRecord.provider == provider)
