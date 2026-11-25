@@ -1,6 +1,6 @@
 [project]
 name = "nexus-observatory-ryan-vo"
-version = "1.7.0"
+version = "1.8.0"
 description = "Cloud-disk sharing URL parser, classifier, and catalog."
 readme = "README.md"
 license = { text = "MIT" }
