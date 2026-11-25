@@ -162,16 +162,27 @@ async def export_links(
     fmt: Annotated[str, Query(pattern="^(json|csv)$", alias="format")] = "json",
     provider: Annotated[str | None, Query()] = None,
     status: Annotated[str | None, Query()] = None,
+    page: Annotated[int, Query(ge=1)] = 1,
+    limit: Annotated[int, Query(ge=1, le=100)] = 100,
 ):
-    """Export all link records as JSON or CSV, honoring optional filters."""
+    """Export link records as JSON or CSV, honoring optional filters and pagination."""
 
-# Combined filter: both provider and status applied with AND
-    query = select(LinkRecord).order_by(LinkRecord.id)
+    # Combined filter: both provider and status applied with AND
+    query = select(LinkRecord)
     if provider:
         query = query.where(LinkRecord.provider == provider)
     if status:
         query = query.where(LinkRecord.status == status)
-    result = await session.execute(query)
+
+    total_result = await session.execute(
+        select(func.count()).select_from(LinkRecord)
+    )
+    total = total_result.scalar_one()
+
+    offset = (page - 1) * limit
+    result = await session.execute(
+        query.order_by(LinkRecord.id.desc()).offset(offset).limit(limit)
+    )
     records = result.scalars().all()
 
     if fmt == "json":
@@ -200,25 +211,9 @@ async def export_links(
     )
 
 
-@router.get("/links/{link_id}", response_model=LinkResponse)
-async def get_link(
-    link_id: int,
-    session: AsyncSession = Depends(get_session),
-) -> LinkResponse:
-    """Retrieve a single link record by ID."""
-    result = await session.execute(
-        select(LinkRecord).where(LinkRecord.id == link_id)
-    )
-    record = result.scalar_one_or_none()
-    if record is None:
-        raise HTTPException(status_code=404, detail="Link not found")
-    return _row_to_response(record)
-
-
-# ── status enum endpoint ──────────────────────────────────────────────
+# ── statuses ────────────────────────────────────────────────────────────
 
 @router.get("/statuses")
 async def list_statuses() -> list[str]:
     """List the possible parse statuses."""
     return [e.value for e in ParseStatus]
-
